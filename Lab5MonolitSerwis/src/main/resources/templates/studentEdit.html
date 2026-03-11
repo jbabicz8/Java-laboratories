@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:if="${student.studentId == null}">Nowy Student</title>
+    <title th:if="${student.studentId != null}">Edycja Studenta</title>
+    <link th:href="@{/css/list-style.css}" rel="stylesheet" />
+    <link th:href="@{/css/form-style.css}" rel="stylesheet" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+        <h1 th:if="${student.studentId == null}">Nowy Student</h1>
+        <h1 th:if="${student.studentId != null}" th:text="'Edycja Studenta: ' + ${student.imie} + ' ' + ${student.nazwisko}">Edycja Studenta</h1>
+        <div class="nav">
+            <a th:href="@{/studentList}">Lista Studentów</a>
+            <a th:href="@{/projektList}">Projekty</a>
+            <a th:href="@{/zadanieList}">Zadania</a>
+        </div>
+    </div>
+    <div th:if="${notFoundError}" class="error-message">
+        <p th:text="${notFoundError}"></p>
+    </div>
+
+    <form th:object="${student}" th:action="@{/studentEdit}" method="post" class="form-container">
+        <input type="hidden" th:field="*{studentId}" />
+
+        <div>
+            <label for="imie">Imię:</label>
+            <input type="text" id="imie" th:field="*{imie}" />
+            <span th:if="${#fields.hasErrors('imie')}" th:errors="*{imie}" class="error"></span>
+        </div>
+        <div>
+            <label for="nazwisko">Nazwisko:</label>
+            <input type="text" id="nazwisko" th:field="*{nazwisko}" />
+            <span th:if="${#fields.hasErrors('nazwisko')}" th:errors="*{nazwisko}" class="error"></span>
+        </div>
+        <div>
+            <label for="nrIndeksu">Nr indeksu:</label>
+            <input type="text" id="nrIndeksu" th:field="*{nrIndeksu}" />
+            <span th:if="${#fields.hasErrors('nrIndeksu')}" th:errors="*{nrIndeksu}" class="error"></span>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" th:field="*{email}" />
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></span>
+        </div>
+        <div>
+            <label for="stacjonarny">Studia stacjonarne:</label>
+            <input type="checkbox" id="stacjonarny" th:field="*{stacjonarny}" />
+        </div>
+
+
+        <div class="form-actions">
+            <input type="submit" value="Zapisz" />
+            <input type="submit" name="cancel" value="Anuluj" />
+            <input th:if="${student.studentId != null}" type="submit" name="delete" value="Usuń" onclick="return confirm('Czy na pewno chcesz usunąć tego studenta?')" />
+        </div>
+    </form>
+</div>
+</body>
+</html>

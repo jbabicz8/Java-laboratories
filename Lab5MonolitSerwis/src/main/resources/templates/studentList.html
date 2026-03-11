@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/list-style.css}" rel="stylesheet" />
+    <title>Lista studentów</title>
+</head>
+<body>
+<div class="main">
+    <div class="header">
+        <h1>Lista studentów</h1>
+        <div class="nav">
+            <a th:href="@{/projektList}">Projekty</a>
+            <a th:href="@{/zadanieList}">Zadania</a>
+        </div>
+    </div>
+    <div class="search">
+        <form th:action="@{/studentList}" method="get">
+            <input type="text" name="nazwisko" placeholder="Wyszukaj po nazwisku..."/>
+            <input type="submit" value="Szukaj"/>
+        </form>
+    </div>
+    <div class="action-btn">
+        <a th:href="@{/studentEdit}">Nowy student</a>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>Nr indeksu</th>
+            <th>Email</th>
+            <th>Tryb studiów</th>
+            <th>Akcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="student : ${studenci}">
+            <td th:text="${student.studentId}">1</td>
+            <td th:text="${student.imie}">Jan</td>
+            <td th:text="${student.nazwisko}">Kowalski</td>
+            <td th:text="${student.nrIndeksu}">123456</td>
+            <td th:text="${student.email}">jan@example.com</td>
+            <td th:text="${student.stacjonarny ? 'Stacjonarny' : 'Niestacjonarny'}">Stacjonarny</td>
+            <td>
+                <a th:href="@{/studentEdit(studentId=${student.studentId})}">Edytuj</a><br/>
+                <a th:href="@{/studentEdit(studentId=${student.studentId},delete='true')}"
+                   onclick="return confirm('Czy na pewno usunąć studenta?')">Usuń</a><br/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,84 @@
+.root {
+    text-align: center;
+}
+.container {
+    text-align: left;
+    display: inline-block;
+    
+}
+.fld {
+    padding: 5px 5px 5px 5px;
+    margin: 5px 5px 5px 5px;
+}
+.btn {
+    padding: 5px 10px 5px 10px;
+    margin: 5px 5px 5px 5px;
+    cursor: pointer;
+}
+.btns-panel {
+    border: 1px solid darkGray;
+    background: lightGray;
+    margin-bottom:15px;
+    text-align:center;
+}
+.lbl {
+    display: block;
+    margin: 10px 5px 0px 5px;
+}
+span.err, label.err {
+    color: red;
+}
+div.err {
+    background-color: #ffcccc;
+    border: 2px solid red;
+    text-align: left;
+}
+textarea.err {
+    background-color: #ffcccc;
+    padding: 5px 5px 5px 5px;
+    margin: 5px 5px 5px 5px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+.section-header h2 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.mini-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.mini-table th, .mini-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.mini-table th {
+    background-color: #f2f2f2;
+}
+
+.mini-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.mini-table a {
+    margin-right: 10px;
+    text-decoration: none;
+    color: #0066cc;
+}
+
+.mini-table a:hover {
+    text-decoration: underline;
+}

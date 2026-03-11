@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:if="${zadanie.zadanieId == null}">Nowe Zadanie</title>
+    <title th:if="${zadanie.zadanieId != null}">Edycja Zadania</title>
+    <link th:href="@{/css/list-style.css}" rel="stylesheet" />
+    <link th:href="@{/css/form-style.css}" rel="stylesheet" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+        <h1 th:if="${zadanie.zadanieId == null}">Nowe Zadanie</h1>
+        <h1 th:if="${zadanie.zadanieId != null}" th:text="'Edycja Zadania: ' + ${zadanie.nazwa}">Edycja Zadania</h1>
+        <div class="nav">
+            <a th:href="@{/zadanieList}">Lista Zadań</a>
+            <a th:href="@{/projektList}">Projekty</a>
+            <a th:href="@{/studentList}">Studenci</a>
+        </div>
+    </div>
+
+    <div th:if="${notFoundError}" class="error-message">
+        <p th:text="${notFoundError}"></p>
+    </div>
+
+    <form th:object="${zadanie}" th:action="@{/zadanieEdit}" method="post" class="form-container">
+        <input type="hidden" th:field="*{zadanieId}" />
+
+        <div>
+            <label for="nazwa">Nazwa:</label>
+            <input type="text" id="nazwa" th:field="*{nazwa}" />
+            <span th:if="${#fields.hasErrors('nazwa')}" th:errors="*{nazwa}" class="error"></span>
+        </div>
+        <div>
+            <label for="opis">Opis:</label>
+            <textarea id="opis" th:field="*{opis}"></textarea>
+            <span th:if="${#fields.hasErrors('opis')}" th:errors="*{opis}" class="error"></span>
+        </div>
+        <div>
+            <label for="kolejnosc">Kolejność:</label>
+            <input type="number" id="kolejnosc" th:field="*{kolejnosc}" />
+            <span th:if="${#fields.hasErrors('kolejnosc')}" th:errors="*{kolejnosc}" class="error"></span>
+        </div>
+
+        <div th:if="${wszystkieProjekty != null}">
+            <label for="projektSelect">Projekt:</label>
+            <select id="projektSelect" name="projektId"> 
+                <option value="">-- Wybierz projekt --</option>
+                <th:block th:each="p : ${wszystkieProjekty}">
+                    <option th:value="${p.projektId}"
+                            th:text="${p.nazwa}"
+                            th:selected="${(zadanie.projekt != null and zadanie.projekt.projektId == p.projektId) or (param.projektId != null and zadanie.projekt == null and #strings.equals(param.projektId[0], p.projektId.toString()))}"></option>
+                </th:block>
+            </select>
+            <span th:if="${#fields.hasErrors('projekt')}" th:errors="*{projekt}" class="error"></span>
+            <span th:if="${projektNotFoundError}" th:text="${projektNotFoundError}" class="error"></span>
+        </div>
+
+
+        <div class="form-actions">
+            <input type="submit" value="Zapisz" />
+            <input type="submit" name="cancel" value="Anuluj" />
+            <input th:if="${zadanie.zadanieId != null}" type="submit" name="delete" value="Usuń" onclick="return confirm('Czy na pewno chcesz usunąć to zadanie?')" />
+        </div>
+    </form>
+</div>
+</body>
+</html>

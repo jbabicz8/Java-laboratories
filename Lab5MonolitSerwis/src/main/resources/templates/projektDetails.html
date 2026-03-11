@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/details-style.css}" rel="stylesheet" />
+    <title>Szczegóły projektu</title>
+</head>
+<body>
+<div class="main">
+    <div class="header">
+        <h1>Szczegóły projektu</h1>
+        <div class="nav">
+            <a href="/projektList">Projekty</a>
+            <a href="/zadanieList">Zadania</a>
+            <a href="/studentList">Studenci</a>
+        </div>
+    </div>
+
+    <div class="project-header">
+        <h2 th:text="${projekt.nazwa}">Nazwa projektu</h2>
+        <p th:text="${projekt.opis}">Opis projektu</p>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <h3>Zadania w projekcie</h3>
+            <a th:href="@{/projektAddZadanie(projektId=${projekt.projektId})}" class="btn">Dodaj zadanie</a>
+        </div>
+
+        <table th:if="${!zadania.isEmpty()}">
+            <thead>
+            <tr>
+                <th>Nazwa</th>
+                <th>Opis</th>
+                <th>Data dodania</th>
+                <th>Akcje</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="zadanie : ${zadania}">
+                <td th:text="${zadanie.nazwa}">Nazwa zadania</td>
+                <td th:text="${zadanie.opis}">Opis zadania</td>
+                <td th:text="${#temporals.format(zadanie.dataczasDodania, 'dd.MM.yyyy HH:mm')}">01.01.2025</td>
+                <td>
+                    <a th:href="@{/zadanieEdit(zadanieId=${zadanie.zadanieId})}">Edytuj</a>
+                    <a th:href="@{/projektRemoveZadanie(projektId=${projekt.projektId},zadanieId=${zadanie.zadanieId})}"
+                       onclick="return confirm('Czy na pewno usunąć?')">Usuń</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <p class="empty-message" th:if="${zadania.isEmpty()}">Brak zadań w tym projekcie</p>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <h3>Studenci przypisani do projektu</h3>
+            <a th:href="@{/projektAddStudent(projektId=${projekt.projektId})}" class="btn">Dodaj studenta</a>
+        </div>
+
+        <table th:if="${!studenci.isEmpty()}">
+            <thead>
+            <tr>
+                <th>Imię</th>
+                <th>Nazwisko</th>
+                <th>Nr indeksu</th>
+                <th>Akcje</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="student : ${studenci}">
+                <td th:text="${student.imie}">Imię</td>
+                <td th:text="${student.nazwisko}">Nazwisko</td>
+                <td th:text="${student.nrIndeksu}">123456</td>
+                <td>
+                    <a th:href="@{/studentEdit(studentId=${student.studentId})}">Edytuj</a>
+                    <a th:href="@{/projektRemoveStudent(projektId=${projekt.projektId},studentId=${student.studentId})}"
+                       onclick="return confirm('Czy na pewno usunąć?')">Usuń</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <p class="empty-message" th:if="${studenci.isEmpty()}">Brak studentów przypisanych do tego projektu</p>
+    </div>
+
+    <div class="button-panel">
+        <a th:href="@{/projektEdit(projektId=${projekt.projektId})}" class="btn">Edytuj projekt</a>
+        <a href="/projektList" class="btn">Powrót do listy projektów</a>
+    </div>
+</div>
+</body>
+</html>

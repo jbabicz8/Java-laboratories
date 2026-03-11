@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/list-style.css}" rel="stylesheet" />
+    <title>Lista Zadań</title>
+</head>
+<body>
+<div class="main">
+    <div class="header">
+        <h1>Lista Zadań</h1>
+        <div class="nav">
+            <a th:href="@{/projektList}">Projekty</a>
+            <a th:href="@{/studentList}">Studenci</a>
+        </div>
+    </div>
+
+    <div class="search">
+        <form th:action="@{/zadanieSearchByNazwa}" method="get">
+            <input type="text" name="nazwa" placeholder="Wyszukaj po nazwie..."/>
+            <input type="submit" value="Szukaj"/>
+        </form>
+    </div>
+
+    <div class="action-btn">
+        <a th:href="@{/zadanieEdit}">Dodaj Zadanie</a>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nazwa</th>
+            <th>Kolejnosc</th>
+            <th>Opis</th>
+            <th>Data Dodania</th>
+            <th>Akcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="zadanie : ${zadania}">
+            <td th:text="${zadanie.zadanieId}">Id</td>
+            <td th:text="${zadanie.nazwa}">Nazwa</td>
+            <td th:text="${zadanie.kolejnosc}">Kolejność</td>
+            <td th:text="${zadanie.opis}">Opis</td>
+            <td th:text="${#temporals.format(zadanie.dataczasDodania, 'yyyy-MM-dd HH:mm:ss')}">Data dodania</td>
+            <td>
+                <a th:href="@{/zadanieEdit(zadanieId=${zadanie.zadanieId})}">Edytuj</a><br>
+                <a th:href="@{/zadanieEdit(zadanieId=${zadanie.zadanieId},delete='true')}"
+                   onclick="return confirm('Czy na pewno chcesz usunąć to zadanie?')">Usuń</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

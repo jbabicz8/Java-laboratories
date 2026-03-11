@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:if="${projekt != null}" th:text="'Dodaj Studenta do Projektu: ' + ${projekt.nazwa}">Dodaj Studenta do Projektu</title>
+  <title th:if="${projekt == null}">Dodaj Studenta do Projektu</title>
+  <link th:href="@{/css/list-style.css}" rel="stylesheet" />
+  <link th:href="@{/css/form-style.css}" rel="stylesheet" />
+
+</head>
+<body>
+<div class="main">
+  <div class="header">
+    <h1 th:if="${projekt != null}" th:text="'Dodaj Studenta do Projektu: ' + ${projekt.nazwa}">Dodaj Studenta</h1>
+    <h1 th:if="${projekt == null}">Dodaj Studenta do Projektu</h1>
+    <div class="nav">
+      <a th:if="${projekt != null}" th:href="@{/projektEdit(projektId=${projekt.projektId})}">Powrót do Edycji Projektu</a>
+      <a th:href="@{/projektList}">Lista Projektów</a>
+      <a th:href="@{/studentList}">Studenci</a>
+      <a th:href="@{/zadanieList}">Zadania</a>
+    </div>
+  </div>
+
+  <div th:if="${message}" class="info-message" th:text="${message}"></div>
+  <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></div>
+
+  <form th:if="${projekt != null}" th:action="@{/projektAddStudent}" method="POST" class="form-container">
+    <input type="hidden" name="projektId" th:value="${projekt.projektId}" />
+
+    <div> 
+      <label for="studentId">Wybierz studenta:</label>
+      <select name="studentId" id="studentId" required>
+        <option value="">-- Wybierz studenta --</option>
+        <option th:each="student : ${studenci}"
+                th:value="${student.studentId}"
+                th:text="${student.imie + ' ' + student.nazwisko + ' (' + student.nrIndeksu + ')'}">
+          Imię Nazwisko
+        </option>
+      </select>
+    </div>
+
+    <div class="form-actions"> 
+      <input type="submit" value="Dodaj" />
+      <a th:href="@{/projektList}" class="button-cancel">Anuluj</a>
+    </div>
+  </form>
+
+  <div th:if="${projekt == null}" class="form-container">
+    <p>Nie określono projektu, do którego ma być dodany student.</p>
+    <div class="form-actions">
+      <a th:href="@{/projektList}" class="button-cancel">Powrót do listy projektów</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

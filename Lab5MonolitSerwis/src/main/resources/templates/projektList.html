@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link th:href="@{/css/list-style.css}" rel="stylesheet" />
+  <title>Lista projektów</title>
+</head>
+<body>
+<div class="main">
+  <div class="header">
+    <h1>Lista projektów</h1>
+    <div class="nav">
+      <a href="/zadanieList">Zadania</a>
+      <a href="/studentList">Studenci</a>
+    </div>
+  </div>
+  <div class="search">
+    <form action="/projektSearchByNazwa" method="get">
+      <input type="text" name="nazwa" placeholder="Wyszukaj po nazwie..."/>
+      <input type="submit" value="Szukaj"/>
+    </form>
+  </div>
+  <div class="action-btn">
+    <a href="/projektEdit">Nowy projekt</a>
+  </div>
+  <table>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nazwa</th>
+      <th>Opis</th>
+      <th>Liczba zadań</th>
+      <th>Liczba studentów</th>
+      <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="projekt : ${projekty}">
+      <td th:text="${projekt.projektId}">1</td>
+      <td th:text="${projekt.nazwa}">Projekt 1</td>
+      <td th:text="${projekt.opis}">Opis projektu</td>
+      <td th:text="${statystyki != null && statystyki[projekt.projektId] != null ? statystyki[projekt.projektId].zadaniaCount : '0'}">0</td>
+      <td th:text="${statystyki != null && statystyki[projekt.projektId] != null ? statystyki[projekt.projektId].studentCount : '0'}">0</td>
+      <td>
+        <a th:href="@{/projektEdit(projektId=${projekt.projektId})}">Edytuj</a><br/>
+        <a th:href="@{/projektEdit(projektId=${projekt.projektId},delete='true')}"
+           onclick="return confirm('Czy na pewno usunąć projekt?')">Usuń</a><br/>
+        <a th:href="@{/projektDetails(projektId=${projekt.projektId})}">Szczegóły</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

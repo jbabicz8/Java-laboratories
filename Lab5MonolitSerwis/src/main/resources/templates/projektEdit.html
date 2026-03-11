@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:if="${projekt.projektId == null}">Nowy Projekt</title>
+  <title th:if="${projekt.projektId != null}">Edycja Projektu</title>
+  <link th:href="@{/css/list-style.css}" rel="stylesheet" />
+  <link th:href="@{/css/form-style.css}" rel="stylesheet" />
+</head>
+<body>
+<div class="main">
+  <div class="header">
+    <h1 th:if="${projekt.projektId == null}">Nowy Projekt</h1>
+    <h1 th:if="${projekt.projektId != null}" th:text="'Edycja Projektu: ' + ${projekt.nazwa}">Edycja Projektu</h1>
+    <div class="nav">
+      <a th:href="@{/projektList}">Lista Projektów</a>
+      <a th:href="@{/studentList}">Studenci</a>
+      <a th:href="@{/zadanieList}">Zadania</a>
+    </div>
+  </div>
+  <!-- Komunikat o nieznalezionym projekcie (jeśli kontroler go doda) -->
+  <div th:if="${notFoundError}" class="error-message">
+    <p th:text="${notFoundError}"></p>
+  </div>
+
+  <form th:object="${projekt}" th:action="@{/projektEdit}" method="post" class="form-container">
+    <input type="hidden" th:field="*{projektId}" />
+    <input type="hidden" th:field="*{createdDate}" />
+
+    <div>
+      <label for="nazwa">Nazwa:</label>
+      <input type="text" id="nazwa" th:field="*{nazwa}" />
+      <span th:if="${#fields.hasErrors('nazwa')}" th:errors="*{nazwa}" class="error"></span>
+    </div>
+    <div>
+      <label for="opis">Opis:</label>
+      <textarea id="opis" th:field="*{opis}"></textarea>
+      <span th:if="${#fields.hasErrors('opis')}" th:errors="*{opis}" class="error"></span>
+    </div>
+    <div>
+      <label for="dataOddania">Data Oddania:</label>
+      <input type="date" id="dataOddania" th:field="*{dataOddania}" />
+      <span th:if="${#fields.hasErrors('dataOddania')}" th:errors="*{dataOddania}" class="error"></span>
+    </div>
+
+    <!-- Umieść tutaj pozostałe, specyficzne dla Twojej aplikacji pola formularza dla projektu -->
+
+    <div class="form-actions">
+      <input type="submit" value="Zapisz" />
+      <input type="submit" name="cancel" value="Anuluj" />
+      <input th:if="${projekt.projektId != null}" type="submit" name="delete" value="Usuń" onclick="return confirm('Czy na pewno chcesz usunąć ten projekt?')" />
+    </div>
+  </form>
+</div>
+</body>
+</html>
