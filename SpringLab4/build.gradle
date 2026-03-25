@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.2.3'
+	id 'org.springframework.boot' version '3.3.0'
 	id 'io.spring.dependency-management' version '1.1.4'
 }
 
@@ -8,7 +8,7 @@ ext {
 	springCloudVersion = "2024.0.1"
 }
 
-group = 'org.dorixon'
+group = 'org.babicz'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -66,6 +66,13 @@ dependencies {
 
 	// AssertJ
 	testImplementation 'org.assertj:assertj-core:3.24.2'
+
+	// JWT i adnotacje lomboka
+	annotationProcessor 'org.projectlombok:lombok'
+	compileOnly 'org.projectlombok:lombok'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.13.0'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.13.0'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.13.0'
 }
 
 dependencyManagement {

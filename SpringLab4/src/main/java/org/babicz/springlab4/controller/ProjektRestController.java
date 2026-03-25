@@ -3,8 +3,10 @@ package org.babicz.springlab4.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.babicz.springlab4.model.Projekt;
 import org.babicz.springlab4.service.ProjektService;
+import org.babicz.springlab4.validation.ValidationService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -23,9 +25,10 @@ import java.util.Map;
 @RequestMapping("/api")
 @Tag(name = "Projekt")
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProjektRestController {
     private final ProjektService projektService;
+    private final ValidationService<Projekt> validator;
 
     @GetMapping("/projekty/{projektId}")
     public ResponseEntity<Projekt> getProjekt(@PathVariable("projektId") Integer projektId)
@@ -35,17 +38,12 @@ public class ProjektRestController {
 
     @PostMapping("/projekty")
     public ResponseEntity<Void> createProjekt(@Valid @RequestBody Projekt projekt) {
-        Projekt savedProjekt = projektService.setProjekt(projekt);
-        if (savedProjekt == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(savedProjekt.getProjektId())
-                .toUri();
-
+        validator.validate(projekt);
+        Projekt createdProjekt = projektService.setProjekt(projekt);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{projektId}")
+                .buildAndExpand(createdProjekt.getProjektId()).
+                toUri();
         return ResponseEntity.created(location).build();
     }
 

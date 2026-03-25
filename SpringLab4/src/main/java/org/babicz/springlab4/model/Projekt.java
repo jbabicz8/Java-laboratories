@@ -12,6 +12,10 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+// nowe importy do automatycznego przypisywania dat i czasu pod. twor. rekordu w bazie
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,14 +39,14 @@ public class Projekt {
         this.projektId = projektId;
         this.nazwa = nazwa;
         this.opis = opis;
-        this.createdDate = LocalDateTime.now();
-        this.lastModifiedDate = lastModifiedDate != null ? lastModifiedDate.atStartOfDay() : null;
+        this.dataczasUtworzenia = LocalDateTime.now();
+        this.dataczasModyfikacji = lastModifiedDate != null ? lastModifiedDate.atStartOfDay() : null;
     }
 
     public Projekt(String nazwa, String opis, LocalDate of) {
         this.nazwa = nazwa;
         this.opis = opis;
-        this.createdDate = LocalDateTime.now();
+        this.dataczasUtworzenia = LocalDateTime.now();
     }
     
     public Projekt(Integer projektId, String nazwa, String opis, LocalDateTime createdDate, LocalDate lastModifiedDate)
@@ -50,15 +54,15 @@ public class Projekt {
         this.projektId = projektId;
         this.nazwa = nazwa;
         this.opis = opis;
-        this.createdDate = createdDate;
-        this.lastModifiedDate = lastModifiedDate.atStartOfDay();
+        this.dataczasUtworzenia = createdDate;
+        this.dataczasModyfikacji = lastModifiedDate.atStartOfDay();
     }
 
     public Projekt(int i, String nazwa1, String opis1, LocalDate of) {
         this.projektId = i;
         this.nazwa = nazwa1;
         this.opis = opis1;
-        this.lastModifiedDate = of.atStartOfDay();
+        this.dataczasModyfikacji = of.atStartOfDay();
     }
 
 
@@ -75,18 +79,18 @@ public class Projekt {
     @Column(nullable = false, length = 1000)
     private String opis;
 
-    @CreatedDate
-    @Column(name="dataczas_utworzenia", nullable = false, updatable = false)
-    private LocalDateTime createdDate;
-
-    @LastModifiedDate
-    @Column(name="dataczas_modyfikacji", insertable = false)
-    private LocalDateTime lastModifiedDate;
     
     @Column(name = "data_oddania")
     private LocalDate dataOddania;
 
+    // nowe adnotacje na tworzenie daty i czasu dla rekordow
+    @CreatedDate
+    @Column(name="dataczas_utworzenia", nullable = false, updatable = false)
+    private LocalDateTime dataczasUtworzenia;
 
+    @LastModifiedDate
+    @Column(name = "dataczas_modyfikacji", insertable = false)
+    private LocalDateTime dataczasModyfikacji;
 
     @OneToMany(mappedBy = "projekt", cascade = CascadeType.ALL)
     @JsonIgnoreProperties({"projekt"})

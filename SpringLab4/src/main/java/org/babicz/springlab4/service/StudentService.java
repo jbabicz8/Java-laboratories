@@ -15,4 +15,5 @@ public interface StudentService {
     Page<Student> findByNrIndeksuStartsWith(String nrIndeksu, Pageable pageable);
     Page<Student> findByNazwiskoStartsWithIgnoreCase(String nazwisko, Pageable pageable);
     Page<Student> getStudenciByProjektId(Integer projektId, Pageable pageable);
+    Optional<Student> findByEmail(String email);
 }

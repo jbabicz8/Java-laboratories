@@ -54,4 +54,9 @@ public class StudentServiceImpl implements StudentService {
     public Page<Student> findByNazwiskoStartsWithIgnoreCase(String nazwisko, Pageable pageable) {
         return studentRepository.findByNazwiskoStartsWithIgnoreCase(nazwisko, pageable);
     }
+
+    @Override
+    public Optional<Student> findByEmail(String email) {
+        return studentRepository.findByEmail(email);
+    }
 }

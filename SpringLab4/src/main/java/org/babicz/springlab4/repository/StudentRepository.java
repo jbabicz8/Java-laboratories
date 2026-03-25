@@ -16,4 +16,6 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     Page<Student> findByProjektyProjektId(Integer projektId, Pageable pageable);
 
     Long countByProjektyProjektId(Integer projektId);
+
+    Optional<Student> findByEmail(String email);
 }
