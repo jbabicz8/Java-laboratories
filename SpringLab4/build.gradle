@@ -55,6 +55,8 @@ dependencies {
 	testImplementation 'org.mockito:mockito-core'
 	testImplementation 'org.mockito:mockito-junit-jupiter'
 	testImplementation 'org.hamcrest:hamcrest'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 
 	// Baza danych
 	runtimeOnly 'org.postgresql:postgresql'
