@@ -28,4 +28,7 @@ public class Student {
     private String email;
 
     private Boolean stacjonarny;
+
+    @Column("projekt_id")
+    private Integer projektId;
 }

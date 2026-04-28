@@ -1,6 +1,7 @@
 package com.project.service;
 
 import com.project.repository.ProjectRepository;
+import com.project.repository.StudentRepository;
 import com.project.repository.ZadanieRepository;
 import com.project.model.Projekt;
 import com.project.model.Zadanie;
@@ -24,6 +25,7 @@ import java.util.List;
 public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
     private final ZadanieRepository zadanieRepository;
+    private final StudentRepository studentRepository;
     private final TransactionalOperator transactionalOperator;
     private final R2dbcEntityTemplate entityTemplate;
 
@@ -100,36 +102,58 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Flux<Projekt> findAllBy(Pageable pageable) {
-        return null;
+        return projectRepository.findAllBy(pageable);
     }
 
     @Override
     public Mono<Long> count() {
-        return null;
+        return projectRepository.count();
     }
 
     @Override
     public Mono<Long> countByNazwa(String nazwa) {
-        return null;
+        return projectRepository.countByNazwaContainingIgnoreCase(nazwa);
     }
 
     @Override
     public Mono<Void> addZadanieToProjekt(Integer projektId, Integer zadanieId) {
-        return null;
+        return projectRepository.findById(projektId)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Projekt nie został znaleziony")))
+                .then(zadanieRepository.findById(zadanieId))
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Zadanie nie zostało znalezione")))
+                .flatMap(zadanie -> {
+                    zadanie.setProjektId(projektId);
+                    return zadanieRepository.save(zadanie);
+                })
+                .then()
+                .as(transactionalOperator::transactional);
     }
 
     @Override
     public Mono<Void> removeZadanieFromProjekt(Integer projektId, Integer zadanieId) {
-        return null;
+        return zadanieRepository.findById(zadanieId)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Zadanie nie zostało znalezione")))
+                .filter(zadanie -> projektId.equals(zadanie.getProjektId()))
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Zadanie nie należy do tego projektu")))
+                .flatMap(zadanie -> zadanieRepository.deleteById(zadanieId))
+                .as(transactionalOperator::transactional);
     }
 
     @Override
     public Mono<Void> addStudentToProjekt(Integer projektId, Integer studentId) {
-        return null;
+        return projectRepository.findById(projektId)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Projekt nie został znaleziony")))
+                .then(studentRepository.findById(studentId))
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Student nie został znaleziony")))
+                .then(studentRepository.dodajStudentaDoProjektu(projektId, studentId))
+                .then()
+                .as(transactionalOperator::transactional);
     }
 
     @Override
     public Mono<Void> removeStudentFromProjekt(Integer projektId, Integer studentId) {
-        return null;
+        return studentRepository.usunStudentaZProjektu(projektId, studentId)
+                .then()
+                .as(transactionalOperator::transactional);
     }
 }
